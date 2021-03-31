@@ -15,6 +15,7 @@ app.use(cors());
 const port = 3001
 
 app.get('/', (req, res) =>{
+  console.log(process.env.DB_NAME);
   res.send('hello its working')
 })
 
