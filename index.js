@@ -14,6 +14,9 @@ app.use(cors());
 
 const port = 3001
 
+app.get('/', (req, res) =>{
+  res.send('hello its working')
+})
 
 
 
