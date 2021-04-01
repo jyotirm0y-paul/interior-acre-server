@@ -9,7 +9,7 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 
 const app = express()
 
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
 app.use(cors());
 
 const port = 3001
