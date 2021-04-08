@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const MongoClient = require('mongodb').MongoClient;
+const ObjectId = require('mongodb').ObjectId;
 require('dotenv').config()
 
 
@@ -12,7 +13,7 @@ const app = express()
 app.use(express.json());
 app.use(cors());
 
-const port = 3001
+const port =process.env.PORT || 3001
 
 app.get('/', (req, res) =>{
   console.log(process.env.DB_NAME);
@@ -25,17 +26,17 @@ app.get('/', (req, res) =>{
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
-  console.log(err)
-  const productsCollection = client.db("emaJohnStore").collection("products");
-  const ordersCollection = client.db("emaJohnStore").collection("orders");
+  // console.log(err)
+  const productsCollection = client.db("assignmentBookVally").collection("products");
+  const ordersCollection = client.db("assignmentBookVally").collection("orders");
 
 
-  app.post('/addProduct', (req, res) => {
+  app.post('/addProducts', (req, res) => {
 const products = req.body;
-productsCollection.insertMany(products)
+productsCollection.insertOne(products)
     .then(result => {
       console.log(result.insertedCount);
-      res.send(result.insertedCount)
+      res.send(result.insertedCount > 0)
     })
   })
 
@@ -72,6 +73,23 @@ app.post('/addOrder', (req, res) => {
         res.send(result.insertedCount > 0)
       })
     })
+
+    app.get('/orders', (req, res) => {
+      ordersCollection.find({})
+      .toArray((err, documents) => {
+        res.send(documents);
+      })
+    })
+
+
+    app.delete('/delete/:id', (req, res) =>{
+      productsCollection.deleteOne({_id: ObjectId(req.params.id)})
+      .then(result =>{
+        console.Console(result)
+      })
+
+    })
+
 
 
 
